@@ -21,7 +21,7 @@ plt.rcParams.update({
 N = 1000
 c = '50.00'
 sigma = "0.071" # "1e-05" "0.071"
-volume_omega = "100.0" # "4.0" "9.0" "16.0" "100.0" "400.0" "40000.0"
+volume_omega = "40000.0" # "4.0" "9.0" "16.0" "100.0" "400.0" "40000.0"
 dt = 0.01
 save_period = 20
 N_step = 5000 # 10000 int(tmax / dt)
@@ -34,7 +34,7 @@ cmap = plt.get_cmap('Blues')
 # 100,000 points per segment means we average ~18 overlapping chunks per time series.
 # This trades some frequency resolution for a much smoother, cleaner curve.
 #num_pts_per_seg = 50000
-num_pts_per_seg = 1250
+num_pts_per_seg = 2500
 #overlap = num_pts_per_seg // 2  # 50% overlap è standard
 
 if binary_file:
@@ -124,8 +124,8 @@ ax[0].plot(time, traj_av, color='orange')
 ax[1].plot(omega, avg_psd, color='orange', label='average')
 for i in range(single_species_to_draw):
     colour = cmap(0.2 + (i / (single_species_to_draw - 1)) * 0.8)
-    ax[0].plot(time, single_x[i], color=colour)
-    ax[1].plot(omega, single_psd[i], color=colour, label=f'species ${i+1}$')
+    ax[0].plot(time, single_x[i], color=colour, alpha=0.5)
+    ax[1].plot(omega, single_psd[i], color=colour, label=f'species ${i+1}$', alpha=0.5)
 # Time series plot
 #ax[0].set_yscale('log')
 ax[0].set_xlim(left=0, right=1000)
