@@ -5,8 +5,8 @@ from pathlib import Path
 
 plt.rcParams.update({
     "text.usetex": True,
-    "font.family": "sans-serif",
-    "font.sans-serif": ["Helvetica"],
+    "font.family" : "serif",
+    "font.serif" : ["Palatino", "New Century Schoolbook", "Bookman", "Computer Modern Roman"],
     #"figure.constrained_layout.use" : True,
     "figure.autolayout" : True,
     "figure.titlesize" : 20,
