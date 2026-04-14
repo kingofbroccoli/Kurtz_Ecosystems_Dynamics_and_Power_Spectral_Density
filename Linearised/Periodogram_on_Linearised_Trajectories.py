@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.signal import welch
+from scipy.signal import periodogram
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -38,13 +38,6 @@ single_species_to_draw = 5
 binary_file = True
 cmap = plt.get_cmap('Blues')
 
-# 100,000 points per segment means we average ~18 overlapping chunks per time series.
-# This trades some frequency resolution for a much smoother, cleaner curve.
-#num_pts_per_seg = 50000
-num_pts_per_seg = 2500
-#num_pts_per_seg = 10000
-#overlap = num_pts_per_seg // 2  # 50% overlap è standard
-
 if binary_file:
     filename = f"Linearised_Trajectories_N{N}_c{c}_{ia_label}_{sigma}_omega{volume_omega}_dt{dt}.bin"
     # Map the binary file using SSD
@@ -58,22 +51,17 @@ else:
 psd_sum = None
 frequencies = None
 
-print("Starting Welch PSD processing over SSD...")
-
 for i in range(N):
     # Extract the full time series for element i
     time_series = data[:, i]
     mean_abund = time_series.mean()
     #print(mean_abund)
 
-    #f, Pxx = welch(time_series, fs=1.0/dt, nperseg=num_pts_per_seg, detrend='constant')
-
     # Manually subtract the global mean to remove the trivial DC peak
     ts_centered = time_series - time_series.mean()
-    # Compute the PSD using Welch's method.
+    # Compute the PSD using standard periodogram (non-parametric)
     # fs=1.0 assumes 1 sample = 1 unit of time. You can change this to 1/dt.
-    f, Pxx = welch(time_series, fs=1.0/(dt*save_period), nperseg=num_pts_per_seg, detrend=False, return_onesided=False) # window='boxcar' noverlap=overlap
-    #f, Pxx = welch(ts_centered, fs=1.0/(dt*save_period), nperseg=num_pts_per_seg, detrend=False, return_onesided=False) # noverlap=overlap
+    f, Pxx = periodogram(time_series, fs=1.0/(dt*save_period), window='boxcar', detrend=False, return_onesided=False) # window='boxcar' noverlap=overlap
  
     # On the first iteration, set up our tracking arrays
     if psd_sum is None:
@@ -139,6 +127,6 @@ ax[1].grid(True, alpha=0.3, which='both')
 ax[1].set_xlabel('$\\omega$')
 ax[1].set_ylabel('$\\Phi(\\omega)$')
 ax[1].legend(loc='upper right', shadow=True)
-plot_path = f"Welch_Method_Linearised_GLV_PSD_Trajectories_N{N}_c{c}_{ia_label}_{sigma}_omega{volume_omega}.pdf"
+plot_path = f"Periodogram_Linearised_GLV_PSD_Trajectories_N{N}_c{c}_{ia_label}_{sigma}_omega{volume_omega}.pdf"
 fig.savefig(plot_path)
 plt.close(fig)

@@ -45,6 +45,7 @@ int main(int argc, char **argv){
 
     double omega = 1.0;
     double sigma = sqrt(1.0 / 4.0 / c);
+    sigma = 1e-5;
 
     //void (*ia_generator)(double*, double*, double, double, double) = &partyally_asymmetric_gaussian;
     //void (*ia_generator)(double*, double*, double, double, double, double, double, double) = &asymmetric_antagonistic_lognormal_extraction;
